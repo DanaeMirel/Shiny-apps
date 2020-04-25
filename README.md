@@ -16,4 +16,7 @@ The `observeEvent()` function allows you to achieve this. It accepts two argumen
    - The function that should be called whenever the event occurs.
 
 3. **Popular baby names App** - This app lets a user choose sex and year, and will display the top 10 most popular names
-in that year. The showed plot has been buil with the plotly package and the table uses the kableExtra package.  
+in that year. The showed plot has been buil with the `plotly` package and the table uses the `kableExtra` package.  
+
+4. **Customizable plot** - Customize the size of the points, the color of the points, the plot title, axis labels, etc. 
+This app uses the `colourpicker` package to let you select any color in your plot, as well as somme special `shinyWidgets`. 
