@@ -20,3 +20,5 @@ in that year. The showed plot has been buil with the `plotly` package and the ta
 
 4. **Customizable plot** - Customize the size of the points, the color of the points, the plot title, axis labels, etc. 
 This app uses the `colourpicker` package to let you select any color in your plot, as well as somme special `shinyWidgets`. 
+The second panel allows the user to explore the data frame using the interactive package `TD` and some customized function 
+from CSS. 
