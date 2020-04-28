@@ -2,6 +2,8 @@ library(shiny)
 library(gapminder)
 library(ggplot2)
 library(colourpicker) 
+library(plotly)
+library(dplyr)
 library(shinyWidgets)
 library(DT)
 

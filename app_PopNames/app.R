@@ -13,7 +13,6 @@ library(shinythemes)
 library(knitr)
 library(kableExtra)
 
-
 babynames <- babynames %>% mutate(year=as.factor(year))
 glimpse(babynames)
 
@@ -21,7 +20,7 @@ ui <- fluidPage(
     titlePanel(h1("Most popular names by year")),
     sidebarLayout(
         sidebarPanel(
-            selectInput('sex', em('Select Sex'), choices = c("F", "M")),
+            selectInput('sex', em('Select Sex'), choices = c("Female" = "F", "Male" = "M")),
             sliderInput('year', em('Select Year'), min = 1880, max = 2017, value = 1900, sep='')),
         mainPanel(
             tabsetPanel(
@@ -52,7 +51,7 @@ server <- function(input, output, session) {
         get_top_names() %>% 
             ggplot(aes(x = name, y = prop, fill= name)) +
             geom_col(alpha=0.5) +
-            scale_color_viridis(option = "B", discrete = TRUE) +
+            scale_fill_viridis(option = "D", discrete = TRUE) +
             theme(legend.position='none', axis.text.x = element_text(angle=90), axis.title.y = element_text(angle=0)) 
         
     })  
