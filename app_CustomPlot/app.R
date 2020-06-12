@@ -43,7 +43,7 @@ ui <- fluidPage(
              plotlyOutput("plot", width = 600, height = 600)
             ), 
             tabPanel("Explore data",
-            sliderInput(inputId = "life", label = "Life expectancy",min = 0, max = 120, value = c(30, 50)),
+            sliderInput(inputId = "life", label = "Life expectancy",min = 0, max = 120, value = c(50, 70)),
             # download button
             downloadButton(outputId = "download_data", label = "Download"),
             #tableOutput("table")
@@ -74,7 +74,7 @@ output$plot <- renderPlotly({
              scale_x_log10() +
              ggtitle(input$title) +
              xlab(input$x_label) +
-             ylab(input$y_label)
+             ylab(input$y_label) 
         
         # When the "fit" checkbox is checked, add a line of best fit
         if (input$fit) {
@@ -85,7 +85,16 @@ output$plot <- renderPlotly({
   })  
     
 output$table <-  DT::renderDT({
-  data_table()
+  
+  datatable(data_table()
+           ,class = 'cell-border stripe'
+           ,rownames = FALSE
+           ,colnames = c('Country', 'Continent', 'Year', 'Life expectancy', 'Population', 'GDP per capita')
+           ,caption = htmltools::tags$caption(style = 'caption-side: bottom; text-align: center;',
+           'Table 1: ', htmltools::em('Information filtered by continent, year and life expectancy in years.'))
+           #,filter = 'top', options = list(pageLength = 5, autoWidth = TRUE)
+           )
+  
 })
 
 output$download_data <- downloadHandler(
@@ -98,4 +107,6 @@ output$download_data <- downloadHandler(
 }
 
 # Run the application
-shinyApp(ui = ui, server = server)
+#shinyApp(ui = ui, server = server)
+
+runApp(list(ui=ui, server=server), host="192.168.1.3", port=1234, launch.browser=TRUE)

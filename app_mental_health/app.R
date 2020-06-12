@@ -4,7 +4,7 @@ library(ggplot2)
 library(dplyr)
 shinyWidgetsGallery()
 
-mental_health_survey <- read.csv('C:/Git/shiny-apps/mental_health_survey_edited.csv')
+mental_health_survey <- read.csv('mental_health_survey_edited.csv')
 #glimpse(mental_health_survey)
 
 ui <- fluidPage(

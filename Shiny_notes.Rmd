@@ -1,0 +1,108 @@
+---
+title: "Shiny Notes"
+author: "Danae Martinez"
+date: "23/04/2020"
+output: html_document
+---
+
+### When to build a web-app?
+
+It can be beneficial for a data scientist to turn their analyses into a web application, especially when interactive exploration of the results are useful. It is important to be able to recognize when building an app is an appropriate solution and when it might not be.
+
+In order to add a plot `p` assigned to an object named $x$ to a Shiny app, you need to:
+
+1. Render the plot object using `renderPlot({p})`.
+2. Assign the rendered plot to `output$x`.
+3. Display the plot in the UI using `plotOutput("x")`
+
+**Update layout (UI)**
+
+You can use layout functions provided by Shiny to arrange the UI elements. In this case, we want to use a `sidebarLayout()`, where the input is placed inside a `sidebarPanel()` and the output is placed inside the `mainPanel()`.
+
+**Selecting an input**
+
+Shiny provides a wide variety of inputs that allows users to provide text (`textInput`, `selectInput`), numbers (`numericInput`, `sliderInput`), booleans (`checkBoxInput`, `radioInput`), and dates (`dateInput`, `dateRangeInput`).
+
+**Add a select input**
+
+Adding an input to a shiny app is a two step process, where you first add an `___Input(“x”)` function to the UI and then access its value in the server using `input$x`.
+
+**Add a table output**
+
+In order to add any output to a Shiny app, you need to:
+
+1. Create the output (plot, table, text, etc.).
+2. Render the output object using the appropriate `render___` function.
+3. Assign the rendered object to `output$x`.
+4. Add the output to the UI using the appropriate `___Output` function.
+
+**Add an interactive table output** 
+
+There are multiple htmlwidgets packages like `DT`, `leaflet`, `plotly`, etc. that provide highly interactive outputs and can be easily integrated into Shiny apps using almost the same pattern. For example, you can turn a static table in a Shiny app into an interactive table using the `DT` package:
+
+1. Create an interactive table using DT::datatable().
+2. Render it using DT::renderDT().
+3. Display it using DT::DTOutput().
+
+**Add interactive plot output** 
+
+Similar to creating interactive tables, you can easily turn a static plot created using ggplot2 into an interactive plot using the `plotly` package. To render an interactive plot, use `plotly::renderPlotly()`, and display it using `plotly::plotlyOutput().`
+
+**Sidebar layouts**
+
+Layout functions allow inputs and outputs to be visually arranged in the UI. A well-chosen layout makes a Shiny app aesthetically more appealing, and also improves the user experience.
+
+**Tab layouts**
+
+Displaying several tables and plots on the same page can lead to visual clutter and distract users of the app. In such cases, the tab layout comes in handy, as it allows different outputs to be displayed as tabs.
+
+**Themes**
+
+Shiny makes it easy to customize the theme of an app. The UI functions in Shiny make use of Twitter Bootstrap, a popular framework for building web applications. Bootswatch extends Bootstrap by making it really easy to skin an application with minimal code changes.
+
+ **Four steps to building a Shiny app**
+ 
+ 1. Add inputs,
+ 2. Add outputs, 
+ 3. Update layout,
+ 4. Update outputs.
+
+**Source vs. Conductor vs. Endpoint**
+
+The magic behind Shiny is driven by reactivity. There are three types of reactive components in a Shiny app.
+
+1. Reactive source: User input that comes through a browser interface, typically.
+2. Reactive conductor: Reactive component between a source and an endpoint, typically used to encapsulate slow computations.
+3. Reactive endpoint: Something that appears in the user's browser window, such as a plot or a table of values.
+
+**Understanding reactive expressions**
+
+One of the central tenets of reactivity is that reactive expressions are executed lazily, and their values are cached.
+
+- Lazy: Evaluated only when it is called, typically by a reactive endpoint.
+- Cached: Evaluated only when the value of one of its underlying dependencies changes.
+
+A reactive expression can call other reactive expressions. This allows you to modularize computations and ensure that they are NOT executed repeatedly. Mastering the use of reactive expressions is key to building performant Shiny applications.
+
+*remark*: It is a side effect if the code introduces anything new in the global environment, or alters it in any way. An observer is used for side effects, like displaying a plot, table, or text in the browser. By default an observer triggers an action, whenever one of its underlying dependencies change.
+
+
+**Stop reactions with `isolate()`**
+
+Ordinarily, the simple act of reading a reactive value is sufficient to set up a relationship, where a change to the reactive value will cause the calling expression to re-execute. The `isolate()` function allows an expression to read a reactive value without triggering re-execution when its value changes.
+
+**Delay reactions with `eventReactive()`**
+
+Shiny's reactive programming framework is designed such that any changes to inputs automatically updates the outputs that depend on it. In some situations, we might want more explicitly control the trigger that causes the update.
+
+The function `eventReactive()` is used to compute a reactive value that only updates in response to a specific event.
+
+**Trigger reactions with observeEvent()**
+
+There are times when you want to perform an action in response to an event. For example, you might want to let the app user download a table as a CSV file, when they click on a "Download" button. Or, you might want to display a notification or modal dialog, in response to a click.
+
+The `observeEvent()` function allows you to achieve this. It accepts two arguments:
+
+1. The event you want to respond to.
+2. The function that should be called whenever the event occurs.
+
