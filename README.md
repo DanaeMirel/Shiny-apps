@@ -8,7 +8,7 @@ building outputs based on the user inputs.
 1. **Alien App** - The National UFO Reporting Center (NUFORC) has collected sightings data throughout the last century. 
 This app allows users to select a U.S. state and a time period in which the sightings occurred.
 
-![view](app_alien.png)
+![view](app_alien/app_alien.png)
 
 
 2. **BMI App** - Sometimes you want to perform an action in response to an event. For example, you might want to display a 
