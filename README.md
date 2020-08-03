@@ -8,12 +8,15 @@ This app allows users to select a U.S. state and a time period in which the sigh
 ![view](app_alien/app_alien.png)
 
 
-2. **BMI App** - Sometimes you want to perform an action in response to an event. For example, you might want to display a 
-notification or modal dialog, in response to a click.
+2. **BMI App (Body Mass Index calculator)** - Sometimes you want to perform an action in response to an event. For example, you might want to display a notification or modal dialog, in response to a click. The `observeEvent()` function allows you to achieve this. It accepts two arguments:
 
-The `observeEvent()` function allows you to achieve this. It accepts two arguments:
    - The event you want to respond to.
    - The function that should be called whenever the event occurs.
+
+![view](app_BMI/app_BMI.png)
+
+This app compute the BMI by receiving the heigth and weigth of the user and shows an example of the `observeEvent()` function.  
+
 
 3. **Popular baby names App** - This app lets a user choose sex and year, and will display the top 10 most popular names
 in that year. The showed plot has been buil with the `plotly` package and the table uses the `kableExtra` package.  
