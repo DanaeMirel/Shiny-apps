@@ -1,11 +1,8 @@
 # Shiny Apps
 
-## Exemples of my work building web applications and interactive  dashboards with Shiny 
+## Exemples of web applications and interactive dashboards with Shiny 
 
-Building a Shiny app is a modular process. You start with the UI, then you work on the server code, 
-building outputs based on the user inputs.
-
-1. **Alien App** - The National UFO Reporting Center (NUFORC) has collected sightings data throughout the last century. 
+1. **Alien App (Alien Sightings Dashboard)** - The data shown in this app, comes from [The National UFO Reporting Center (NUFORC)](http://www.nuforc.org/), which is an organization in the United States that investigates UFO sightings and/or alien contacts.
 This app allows users to select a U.S. state and a time period in which the sightings occurred.
 
 ![view](app_alien/app_alien.png)
