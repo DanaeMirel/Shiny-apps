@@ -1,55 +1,75 @@
-library(shiny)
-library(gapminder)
-library(ggplot2)
-library(colourpicker) 
-library(plotly)
-library(dplyr)
-library(shinyWidgets)
-library(DT)
 
-my_css <- " 
-#download_data {
-/* Change the background color of the download button to orange. */
-background: orange;
-}
-"
+#------------------------------#
+#---# customize your plots #---#
+#------------------------------#
+
+library("shiny")
+library("gapminder")
+library("ggplot2")
+library("colourpicker") 
+library("plotly")
+library("dplyr")
+library("shinyWidgets")
+library("DT")
 
 # Define UI for the application
 ui <- fluidPage(
-    titlePanel(h2('Make the perfect plot using Shiny')), 
-    tags$style(my_css),
-    sidebarLayout(
+    titlePanel(h2('Make the perfect plot using Shiny')) 
+    , sidebarLayout(
+        #---# SIDEBARPANEL #---#
         sidebarPanel(
-            textInput("title", em("Choose a title"), "GDP vs Life Expectancy"),
-            textInput("x_label", em("Choose the x label "), "GDP"),
-            textInput("y_label", em("Choose the y label"), "Life Expectancy"),
-            numericInput("size", em("Chosse the point size"), 1, 1),
-            # Add a checkbox for line of best fit
-            materialSwitch("fit",  strong(em("Add line of best fit")), value = FALSE,  status = "danger"),
-            colourInput("color", em("Choose the point color"), value ="blue"),
-            # Add a continent dropdown selector
-            pickerInput("continents", em("Chose the continents"),
-                        choices =  levels(gapminder$continent),
-                        multiple = TRUE,
-                        selected = "Europe",
-                        options = list(style = "btn-danger")), 
-            # Add a slider selector for years to filter
-            sliderInput("years", em("How many years?"), min = min(gapminder$year)
-                        , max = max(gapminder$year), value = c(1977,2002), sep='', step=1)
-        ),
-        mainPanel(
-          tabsetPanel(
-            tabPanel("Customize plot",
-             plotlyOutput("plot", width = 600, height = 600)
-            ), 
-            tabPanel("Explore data",
-            sliderInput(inputId = "life", label = "Life expectancy",min = 0, max = 120, value = c(50, 70)),
-            # download button
-            downloadButton(outputId = "download_data", label = "Download"),
-            #tableOutput("table")
-            DT::DTOutput("table")
+              textInput(inputId = "title"
+                        , label = em("Choose a title")
+                        , value = "GDP vs Life Expectancy")
+            , textInput(inputId = "x_label"
+                        , label = em("Choose the x label ")
+                        , value = "GDP")
+            , textInput(inputId = "y_label"
+                        , label = em("Choose the y label")
+                        , value = "Life Expectancy")
+            , numericInput(inputId = "size"
+                           , label = em("Chosse the point size")
+                           , value = 1
+                           , step = 1)
+            #---# Add a checkbook for adding a line representing the best fit #---#
+            , materialSwitch(inputId = "fit"
+                             ,  label = strong(em("Add line of best fit"))
+                             , value = FALSE
+                             ,  status = "danger")
+            , colourInput(inputId = "color"
+                          , label = em("Choose the point color")
+                          , value ="blue")
+            , pickerInput(inputId = "continents"
+                          , label = em("Chose the continents")
+                          , choices =  levels(gapminder$continent)
+                          , multiple = TRUE
+                          , selected = "Europe"
+                          , options = list(style = "btn-danger")) 
+            #---# Add a slider selector for years to filter #---#
+            , sliderInput(inputId = "years"
+                          , label = em("How many years?")
+                          , min = min(gapminder$year)
+                          , max = max(gapminder$year)
+                          , value = c(1977, 2002)
+                          , sep=''
+                          , step=1)
+        )
+        #---# MAINPANEL #---#        
+        , mainPanel(
+            tabsetPanel(
+              tabPanel("Customize plot"
+                       , plotlyOutput("plot", width = 600, height = 600)) 
+            , tabPanel("Explore data"
+                       , sliderInput(inputId = "life"
+                                     , label = "Life expectancy"
+                                     , min = 0
+                                     , max = 120
+                                     , value = c(50, 70))
+            #---# download button #---#
+            , downloadButton(outputId = "download_data"
+                             , label = "Download")
+            , DT::DTOutput("table"))
             )
-          )
         )
     )
 )
@@ -63,12 +83,13 @@ data_plot <- reactive({
   })
 
 data_table <- reactive({
-  data_plot() %>% filter(between(lifeExp, input$life[1], input$life[2]))
+  data_plot() %>% 
+    filter(between(lifeExp, input$life[1], input$life[2]))
 })
   
 output$plot <- renderPlotly({
-        ggplotly({
   
+        ggplotly({
         p <- ggplot(data_plot(), aes(gdpPercap, lifeExp)) +
              geom_point(size = input$size, col = input$color) +
              scale_x_log10() +
@@ -76,25 +97,23 @@ output$plot <- renderPlotly({
              xlab(input$x_label) +
              ylab(input$y_label) 
         
-        # When the "fit" checkbox is checked, add a line of best fit
+        # When the "fit" checkbook is checked, add a line of best fit
         if (input$fit) {
             p <- p + geom_smooth(method = "lm")
         }
         p
-    })
+      })
   })  
     
-output$table <-  DT::renderDT({
+output$table <- DT::renderDT({
   
   datatable(data_table()
-           ,class = 'cell-border stripe'
-           ,rownames = FALSE
-           ,colnames = c('Country', 'Continent', 'Year', 'Life expectancy', 'Population', 'GDP per capita')
-           ,caption = htmltools::tags$caption(style = 'caption-side: bottom; text-align: center;',
-           'Table 1: ', htmltools::em('Information filtered by continent, year and life expectancy in years.'))
-           #,filter = 'top', options = list(pageLength = 5, autoWidth = TRUE)
+           , class = 'cell-border stripe'
+           , rownames = FALSE
+           , colnames = c('Country', 'Continent', 'Year', 'Life expectancy', 'Population', 'GDP per capita')
+           , caption = htmltools::tags$caption(style = 'caption-side: bottom; text-align: center;'
+           , 'Table 1: ', htmltools::em('Information filtered by continent, year and life expectancy in years.'))
            )
-  
 })
 
 output$download_data <- downloadHandler(
@@ -107,6 +126,4 @@ output$download_data <- downloadHandler(
 }
 
 # Run the application
-#shinyApp(ui = ui, server = server)
-
-runApp(list(ui=ui, server=server), host="192.168.1.3", port=1234, launch.browser=TRUE)
+shinyApp(ui = ui, server = server)
