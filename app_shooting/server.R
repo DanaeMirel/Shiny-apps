@@ -1,5 +1,11 @@
 
-shootings <- read.csv('C:/Git/shiny-apps/app_shooting/mass-shootingsupdate.csv')
+library("shiny")
+library("leaflet")
+library("dplyr")
+library("lubridate") # formatting dates
+library("readr")
+
+shootings <- read_csv("/home/danae/Documents/Git/shiny-apps/app_shooting/mass-shootingsupdate.csv")
 
 mass_shootings <- shootings %>%  
   mutate(Date = mdy(date)) %>% 
@@ -8,7 +14,6 @@ mass_shootings <- shootings %>%
 text_about <- "This data was compiled by Mother Jones, nonprofit founded in 1976. 
                Originally covering cases from 1982-2012, this database has since been 
                expanded numerous times to remain current."
-
 
 server <- function(input, output, session) {
   
